@@ -1,0 +1,10 @@
+# Dataset is too large for normal GitHub (100 MB file limit)
+Movies_and_TV.csv
+
+# Python / Jupyter
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
