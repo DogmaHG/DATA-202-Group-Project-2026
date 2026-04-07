@@ -1,5 +1,6 @@
 # Dataset is too large for normal GitHub (100 MB file limit)
 Movies_and_TV.csv
+Movies_and_TV_5.json.gz
 
 # Python / Jupyter
 __pycache__/
