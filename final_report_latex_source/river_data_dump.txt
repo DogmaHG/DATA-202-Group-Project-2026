@@ -1,0 +1,116 @@
+================================================================================
+river_data_dump.txt
+Summarizes findings from Code/final_review_behavior_analysis.ipynb
+(see also river_notebook_text.md and river_figure_01.png–river_figure_05.png)
+================================================================================
+
+Abstract
+--------
+This analysis used the full Movies_and_TV.csv interaction extract (McAuley-style Amazon reviews): 8,765,568 rating rows, aggregated to 182,032 distinct movies and 3,826,085 users. After minimum-activity filters (n_reviews >= 5 for both movie- and user-level analyses), 89,590 movies and 311,221 users entered the correlation studies. Popularity (review count) showed only negligible-to-weak rank associations with mean movie rating and with within-movie rating standard deviation (divisiveness). User activity showed a small negative association with mean user rating (“harshness” proxy). Heavy users (top decile by review count, threshold n_reviews >= 19; 32,905 users) contributed 16.4% of all reviews, rated slightly lower on average than non-heavy users, and showed modestly higher within-user rating variability; point-biserial correlations between star rating and heavy-user status were statistically significant but negligible in strength. All patterns are associative only and specific to this dataset slice.
+
+
+Introduction
+------------
+Online product reviews link visibility (how often an item is rated), disagreement among raters, and reviewer behavior (volume and leniency). This notebook addresses: (1) whether movies with more reviews have higher or lower average stars; (2) whether review volume relates to divisiveness (spread of 1–5 star ratings); (3) whether users who write more reviews give systematically lower average scores; and (4) whether “heavy” reviewers differ from others in means, spread, and star mix. Project goals align with understanding factors that shape how movies are reviewed and how users review (see ProjectGoals.md).
+
+
+Data Description
+----------------
+Source file: Movies_and_TV.csv.
+Variables per row: item_id, user_id, rating (1–5), timestamp (converted to UTC datetime).
+Loading: full file via chunked reads (no random subsampling); all rows loaded.
+
+Entity-level aggregates:
+  - n_reviews: count of rows for each movie (item_id) or user (user_id).
+  - mean_rating: arithmetic mean of ratings.
+  - std_rating: sample standard deviation of ratings (divisiveness); meaningful with at least two ratings per movie.
+
+Filters applied for stability of means and SDs:
+  - MIN_MOVIE_REVIEWS = 5 for movie-level correlations.
+  - MIN_USER_REVIEWS = 5 for user-level “harshness” analysis.
+
+After filtering:
+  - Movies: 182,032 total titles; 89,590 with n_reviews >= 5.
+  - Users: 3,826,085 total; 311,221 with n_reviews >= 5.
+
+
+Methods
+-------
+Software stack (notebook): Python with pandas, NumPy, SciPy (stats), matplotlib, seaborn.
+
+Correlation reporting for continuous pairs (movie/user counts vs outcomes):
+  - Pearson r on raw review counts and on log1p(n_reviews) (aligned with log-scaled scatter x-axes); R-squared from log-scale Pearson where reported.
+  - Spearman rho and Kendall tau for monotonic association.
+  - Exploratory strength labels for |Spearman rho| (negligible / weak / moderate / strong bands).
+
+Heavy-user definition:
+  - Among users with n_reviews >= MIN_USER_REVIEWS, heavy users are those at or above the 90th percentile of n_reviews (HEAVY_QUANTILE = 0.90).
+  - Compared heavy vs non-heavy: share of all reviews, overall mean rating, shares of low (1–2) and high (4–5) stars, mean within-user rating SD, Mann–Whitney U on within-user SDs, point-biserial correlation between rating and heavy-user indicator (0/1).
+
+Figures exported in this folder: river_figure_01.png (movie count vs mean), river_figure_02.png (movie count vs SD), river_figure_03.png (user activity vs mean), river_figure_04.png (boxplots), river_figure_05.png (star-mix bars).
+
+
+Analysis & Results
+------------------
+
+A. Movie review count vs mean rating (n = 89,590 movies)
+    Pearson r (raw): +0.0403 (p ≈ 1.88e-33); labeled negligible strength.
+    Pearson r (log1p count): +0.0981 (p ≈ 2.39e-190); R-squared ≈ 0.0096.
+    Spearman rho: +0.0672 (p ≈ 2.74e-90); negligible strength.
+    Kendall tau: +0.0471 (p ≈ 3.10e-96).
+    Interpretation: statistically detectable positive association; effect sizes remain small—review volume explains little variance in mean rating.
+
+B. Movie review count vs rating SD / divisiveness (n = 89,590 movies)
+    Pearson r (raw): -0.0124 (p ≈ 2.17e-04); negligible.
+    Pearson r (log1p count): -0.0034 (p ≈ 0.305); R-squared ≈ 0.0000.
+    Spearman rho: -0.0310 (p ≈ 1.62e-20); negligible.
+    Kendall tau: -0.0269 (p ≈ 1.06e-32).
+    Interpretation: tiny negative rank association; divisiveness is not strongly tied to popularity in this extract.
+
+C. User review count vs mean user rating / harshness proxy (n = 311,221 users)
+    Pearson r (raw): -0.0234 (p ≈ 5.17e-39); negligible.
+    Pearson r (log1p count): -0.0207 (p ≈ 7.79e-31); R-squared ≈ 0.0004.
+    Spearman rho: -0.0574 (p ≈ 2.82e-225); negligible.
+    Kendall tau: -0.0408 (p ≈ 1.42e-218).
+    Interpretation: users with more reviews in the file tend to have slightly lower average scores on average (direction consistent with “stricter” heavy reviewers), but the relationship is weak.
+
+D. Heavy users (>= 90th percentile of n_reviews among filtered users; threshold n_reviews >= 19)
+    Number of heavy users: 32,905.
+    Share of all review rows: heavy 16.43%, non-heavy 83.57%.
+    Overall mean rating (all rows): heavy 4.155, non-heavy 4.248.
+    Share of 1–2 star reviews: heavy 11.01%, non-heavy 12.03%.
+    Share of 4–5 star reviews: heavy 76.87%, non-heavy 80.30%.
+    Mean within-user rating SD (among users with n >= MIN_USER_REVIEWS): heavy 0.8600; non-heavy 0.7965.
+    Mann–Whitney U (heavy vs non-heavy within-user SD): p ≈ 2.29e-132.
+    Review-level association (N = 8,765,568 rows): point-biserial Pearson r ≈ -0.0282; Spearman rho ≈ -0.0575; Kendall tau ≈ -0.0541 (all p-values effectively zero at printed precision; strength labels negligible).
+
+Consolidated correlation table (key Pearson/Spearman values match sections A–D above; heavy-user row uses full review-level N).
+
+
+Discussion
+----------
+Effect sizes: Despite many highly significant p-values (large N), all labeled correlation strengths are “negligible” under the notebook’s exploratory bands. Substantive conclusions should emphasize small explained variance (e.g., R-squared on log count for movie mean rating under 1%) rather than significance alone.
+
+Movie popularity: A weak positive link between review volume and mean rating is consistent with mainstream titles receiving both more ratings and slightly higher averages, but genre, quality, and selection effects are not controlled.
+
+Divisiveness: The near-zero R-squared on log count vs SD suggests popularity does not systematically drive agreement or disagreement in a strong way in this file.
+
+User harshness: The negative association between activity and mean user score is consistent with more active raters being slightly more critical on average, or with cohort/selection effects (different item mixes over time).
+
+Heavy users: Group differences in mean rating and star mix are modest; heavy users have slightly higher internal variability (SD). Boxplot summaries (medians ~4.34 heavy vs ~4.42 non-heavy in printed numeric summary) overlap substantially—behavior is more similar than different, with statistically detectable but small shifts.
+
+Causality: Correlations do not imply causation. Visibility, item characteristics, and temporal factors confound volume-outcome relationships.
+
+
+Conclusion
+----------
+In the Movies_and_TV.csv extract analyzed without subsampling, movie review count bears only a weak positive association with average rating and a negligible negative association with rating spread. User review count shows a weak negative association with mean user rating. Heavy reviewers (top 10% by activity among users with at least five reviews) differ slightly from others in mean rating, star distribution, and within-user variability; review-level correlations with heavy-user status remain negligible in strength. Findings describe structure in this dataset only; generalization to all Amazon or movie reviews requires broader data and modeling beyond bivariate correlation.
+
+
+References
+----------
+- Dataset schema and project framing: DatasetDescription.md; ProjectGoals.md (repository root).
+- Analysis notebook: Code/final_review_behavior_analysis.ipynb.
+- Primary data file: Movies_and_TV.csv (Amazon Movies & TV reviews; McAuley/Leskovec-style extract as used in course project).
+- Companion narrative extract: final_report_latex_source/river_notebook_text.md.
+- Figures: final_report_latex_source/river_figure_01.png through river_figure_05.png.
