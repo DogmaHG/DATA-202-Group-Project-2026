@@ -1,0 +1,9 @@
+Building the IEEE-style report (requires a LaTeX installation such as MacTeX, TeX Live, or MiKTeX):
+
+  cd FinalReport
+  pdflatex report.tex
+  pdflatex report.tex
+
+Figures live under FinalReport/figures/. Regenerate supporting PNGs by running scripts/notebooks in Code/ (e.g., correlation_analysis.py, MathProjectFinal.Py, reviewer_analysis.py) and copying outputs here if paths change. report.tex references: river_figure_*.png (01--03, 05), plot_*.png, ratings_over_time.png, average_rating_by_month.png.
+
+This environment did not include pdflatex; compile on a machine with LaTeX installed to produce report.pdf.

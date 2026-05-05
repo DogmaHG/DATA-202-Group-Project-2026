@@ -1,0 +1,65 @@
+Here is a comprehensive write-up of your project based on the provided presentations:
+
+# Decoding User-Movie Interactions and Review Behaviors
+**Authors:** Cliff, Luca, River, Timothy
+
+## Abstract
+This project analyzes user-movie interactions within an Amazon Movies and TV recommendation network to determine the factors that influence user preferences, movie popularity, and review helpfulness. The dataset spans from 1997 to 2018, containing over 3.4 million reviews across roughly 297,000 unique users and 60,000 unique items. Through exploratory data analysis, hypothesis testing, correlation analysis, and regression modeling, we investigated how users rate movies and what features make a review helpful. Key findings indicate that ratings are heavily skewed positively, and while review length has a weak correlation with the actual star rating, it maintains a moderate positive association with helpful votes even after controlling for other factors.
+
+## Introduction
+The primary motivation of this project is to analyze user-movie interactions to decode review behaviors. Specifically, we aim to understand the factors that influence user preferences, movie popularity, and how movies are reviewed. By examining a massive dataset of review events, we seek to determine the key factors that influence review scores, review consistency, and the perceived helpfulness of written feedback.
+
+## Data Description
+The data for this analysis was sourced from a ratings-only dataset of Amazon's Movies and TV category. The dataset spans from 1997 to 2018 and is highly sparse, with an estimated sparsity of 0.999810.
+
+**Key Variables and Types:**
+* **item_id:** Product identifier (Categorical, nominal).
+* **user_id:** Reviewer identifier (Categorical, nominal).
+* **rating:** Score assigned to an item ranging from 1 to 5 (Quantitative, discrete).
+* **timestamp:** Unix review time, which was converted to a calendar datetime (Numeric time variable).
+
+**Data Preprocessing:**
+* Initial validation was performed to check schemas, confirm variable types, and observe structural summaries.
+* To filter the dataset for modeling, analysis was restricted to users who met a minimum activity level of $\ge5$ reviews, yielding approximately 89,590 qualified users and 311,221 qualified movies.
+* Because review length (word count) and helpful votes were found to be highly right-skewed, logarithmic transformations and median values were used to analyze these variables properly.
+
+## Mathematical / Statistical Methods
+Several statistical concepts were utilized to uncover patterns in the data:
+
+* **Descriptive Statistics:** Used to summarize the center and spread of the data. For instance, computing the mean, median, standard deviation, and quartiles was essential to reveal the heavy positive skew in ratings.
+* **Hypothesis Testing & Confidence Intervals:** A one-sample t-test was conducted to verify if the overall dataset average rating was meaningfully higher than a standard benchmark of 4.0.
+    * Null Hypothesis: $H_0 : \mu=4.0$
+    * Alternative Hypothesis: $H_1: \mu \neq 4.0$
+* **Correlation:** Pearson and Spearman correlations were used to measure relationships between variables. Spearman correlation was explicitly chosen for review length versus helpful votes and ratings because of the skewed nature of the data.
+* **Regression Analysis:** Used to isolate the association between review length and helpfulness while accounting for confounding variables. The model formula used was: `log(1 + helpful_votes) ~ log(1 + review_length_words) + rating + verified + year`. Logarithmic scaling made the highly skewed relationships easier to observe and model appropriately.
+
+## Analysis & Results
+
+**Rating Distributions and Behaviors**
+* Ratings are heavily concentrated at the high end; at least 50% of all ratings are 5-stars, and at least 75% are 4 or 5-stars.
+* The overall mean rating in the full dataset is 4.2213.
+* Our one-sample t-test yielded a t-statistic of 350.3734 and a p-value of < 0.001, allowing us to conclude that the mean rating is statistically different from 4.0.
+* Approximately 176,000 reviewers (the majority) have never left a negative review, indicating that negative reviews are highly concentrated among a select few users.
+
+**Review Length and Helpfulness**
+* Review lengths are strongly right-skewed, with a median of 25 words but a mean of 81.1 words, as long reviews pull the average upward.
+* 2-star reviews generally had the longest median length, while 5-star reviews were the shortest.
+* There is a weak relationship between review length and the star rating ($\rho=-0.1907$).
+* Conversely, there is a moderate positive relationship between review length and helpful votes ($\rho=0.4974$).
+* After applying regression to control for rating, verified status, and year, longer reviews remained positively associated with receiving more helpful votes.
+
+**Reviewer Activity**
+* User and item activity are highly uneven, featuring a long-tail distribution.
+* "Heavy" reviewers (top decile by total reviews) write longer reviews than non-heavy reviewers, and have a slightly lower median rating (4.3421) compared to non-heavy users (4.4167).
+
+## Discussion / Interpretation
+The analysis clearly indicates that a user's star rating alone does not fully capture their engagement with a movie. The most significant finding is that review length adds critical information beyond star ratings. Because longer reviews correlate moderately with helpful votes (even after controlling for verification, year, and rating score), we interpret review length as a reflection of reviewer engagement and perceived usefulness to the reader.
+
+A limitation of our approach is the massive sample size (n > 3.4 million), which causes confidence intervals to be extremely narrow and tests (like the t-test against 4.0) to achieve statistical significance effortlessly. Therefore, practical significance is a more vital metric than the p-value alone. Additionally, the heavy tail of interactions and high sparsity (0.9998) limits how many unique items and users survive strict filtering criteria. Finally, our regression findings establish an association between review length and helpfulness, not direct causation.
+
+## Conclusion
+This project successfully parsed a massive, highly sparse dataset of Amazon movie reviews to identify what drives review behavior. We found that the vast majority of interactions skew highly positive, with 5-star ratings dominating the ecosystem. While the numerical rating tells us about general sentiment, examining the length of written reviews provided deeper insights. Review length proved to be a reliable proxy for reader engagement and perceived usefulness, showing a robust association with helpful votes that persists even after rigorous statistical controls.
+
+## References
+* DATA 202 - Mid Presentation.pdf
+* DATA 202 - Final Presentation.pdf

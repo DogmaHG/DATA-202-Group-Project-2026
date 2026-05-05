@@ -1,1 +1,0 @@
-The project has the goal of using the available analytical techniques to develop a model that could be used to provide recommendations of movies based on the data provided in the csv.

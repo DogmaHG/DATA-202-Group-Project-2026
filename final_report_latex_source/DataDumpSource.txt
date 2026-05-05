@@ -1,0 +1,517 @@
+That changes the dump doc slightly. Since the final report is IEEE-style, 2 columns, 6–8 pages max, your team should not dump everything into the final report. The dump doc should collect raw material, then you compress it.
+Use this structure instead.
+
+DATA 202 Final Report Data Dump
+Submission Requirements
+Due: Before class on May 5
+Required deliverables:
+Final report
+IEEE-style format
+2 columns
+Maximum 6–8 pages
+Data and code
+Final presentation slides
+Required report sections:
+Title & Authors
+Abstract
+Introduction
+Data Description
+Mathematical / Statistical Methods
+Analysis & Results
+Discussion / Interpretation
+Conclusion
+References
+
+1. Title & Authors
+Working title
+Analyzing Rating Behavior and Review Comment Length in Amazon Movies and TV Reviews
+Authors
+Cliff, Luca, River, Timothy
+
+2. Abstract Dump
+Each person add 1–2 sentences max.
+Group abstract draft
+This project analyzes Amazon Movies and TV review data to understand rating behavior, reviewer activity, item popularity, and review comment length. Using descriptive statistics, data visualizations, correlation analysis, hypothesis testing, and regression modeling, we found that ratings are strongly skewed positive, user and item activity are highly uneven, and longer written reviews are more associated with helpfulness votes.
+Add teammate contributions here
+Cliff:
+[Add 1 sentence]
+Luca:
+[Add 1 sentence]
+River:
+This analysis used the full Movies_and_TV.csv interaction extract (McAuley-style Amazon reviews): 8,765,568 rating rows, aggregated to 182,032 distinct movies and 3,826,085 users. After minimum-activity filters (n_reviews >= 5 for both movie- and user-level analyses), 89,590 movies and 311,221 users entered the correlation studies. Popularity (review count) showed only negligible-to-weak rank associations with mean movie rating and with within-movie rating standard deviation (divisiveness). User activity showed a small negative association with mean user rating (“harshness” proxy). Heavy users (top decile by review count, threshold n_reviews >= 19; 32,905 users) contributed 16.4% of all reviews, rated slightly lower on average than non-heavy users, and showed modestly higher within-user rating variability; point-biserial correlations between star rating and heavy-user status were statistically significant but negligible in strength. All patterns are associative only and specific to this dataset slice.
+
+
+Timothy:
+My section adds a text-based behavioral analysis by measuring review comment length and comparing it with rating, helpfulness votes, verified status, reviewer activity, and time.
+
+3. Introduction Dump
+Problem statement
+We analyze Amazon Movies and TV reviews to understand how users rate items and how reviewer behavior differs across users, items, and review types. The project focuses on patterns in star ratings, reviewer activity, item popularity, negative-review behavior, and review comment length.
+Motivation
+Online reviews influence product discovery, consumer decisions, and recommendation systems. Star ratings summarize user opinion, but they do not fully capture reviewer behavior. A user who leaves a 5-star review with two words behaves differently from a user who leaves a detailed 5-star explanation. Similarly, frequent reviewers may differ from casual reviewers.
+Practical importance
+This project helps identify:
+whether ratings are balanced or skewed,
+whether user and item activity are concentrated,
+whether reviewer activity relates to rating behavior,
+whether longer reviews are associated with helpfulness,
+and what limitations arise when using review data for recommendation-style analysis.
+
+4. Data Description Dump
+Dataset source
+Amazon Review Data 2018, Movies and TV category.
+Dataset clarification
+Important: for the final report, describe this as the Movies and TV 5-core review dataset, not the full ratings-only dataset, because your final work uses reviewText, verified, and vote.
+Dataset facts
+Total records: 3,410,019
+Unique users: 297,529
+Unique items: 60,175
+Rating range: 1 to 5
+Date range: 1997-12-02 to 2018-10-01
+Mean ratings per user: 11.46
+Mean ratings per item: 56.67
+Sparsity: 0.999810
+Variables
+Variable
+Type
+Meaning
+overall
+quantitative discrete
+Rating from 1 to 5
+reviewerID
+categorical nominal
+User/reviewer identifier
+asin
+categorical nominal
+Amazon item identifier
+unixReviewTime
+quantitative/time
+Unix review timestamp
+reviewText
+text
+Full written review
+summary
+text
+Short review title
+verified
+categorical binary
+Verified-purchase indicator
+vote
+quantitative count
+Helpfulness votes
+
+Preprocessing dump
+Add what your team did:
+loaded JSON review file,
+checked expected columns,
+converted overall to numeric rating,
+validated rating range,
+converted Unix timestamps to dates,
+extracted year/month,
+computed reviewer review counts,
+computed item review counts,
+parsed helpfulness votes,
+engineered review length variables.
+
+5. Mathematical / Statistical Methods Dump
+This is a required section. Each teammate should list the methods they used, formulas, and why.
+5.1 Descriptive Statistics
+Used for rating distribution, review length, reviewer activity, and item activity.
+Include:
+mean
+median
+mode
+standard deviation
+quartiles
+min/max
+frequency counts
+r-score
+correlation
+Formula examples:
+Mean = (x1 + x2 + ... + xn) / n
+
+Sample standard deviation = sqrt( sum((xi - xbar)^2) / (n - 1) )
+
+5.2 Sparsity
+Used to measure how incomplete the user-item matrix is.
+Sparsity = 1 - observed ratings / (number of users × number of items)
+
+Result:
+Sparsity = 0.999810
+
+Interpretation:
+Most possible user-item pairs are unobserved.
+5.3 Confidence Interval
+Used to estimate the true mean rating.
+95% CI = xbar ± 1.96 × SE
+SE = s / sqrt(n)
+
+Result:
+95% CI = [4.2201, 4.2226]
+
+5.4 One-Sample t-Test
+Used to test whether the mean rating differs from 4.0.
+t = (xbar - μ0) / (s / sqrt(n))
+
+Results:
+xbar = 4.2213
+μ0 = 4.0
+t = 350.37
+p < 0.001
+
+Interpretation:
+The mean rating is statistically above 4.0, but the practical difference is modest.
+5.5 Correlation
+Used to measure relationships between variables.
+Examples:
+rating over time vs review volume,
+reviewer activity vs average rating,
+review length vs helpful votes.
+Timothy result:
+Spearman correlation between review length and helpful votes = 0.497
+
+5.6 Group Comparison Tests
+Used for comparing review length across groups.
+Examples:
+verified vs unverified reviews,
+heavy vs non-heavy reviewers,
+rating groups 1–5.
+Possible tests:
+Mann-Whitney U test
+Kruskal-Wallis test
+Reason:
+Review length is right-skewed, so nonparametric tests are more appropriate than relying only on means.
+5.7 Regression Model
+Timothy’s regression:
+log(1 + helpful_votes) ~ log(1 + review_length_words) + rating + verified + year
+
+Result:
+Coefficient for log review length = 0.1677
+
+Interpretation:
+Longer reviews are positively associated with helpfulness votes after controlling for rating, verified status, and year.
+
+6. Analysis & Results Dump
+This section should be mostly charts, tables, and concise explanation.
+6.1 Rating Distribution Results
+Paste chart: rating distribution bar chart.
+Key numbers:
+Mean rating: 4.2213
+Median: 5
+Mode: 5
+Standard deviation: 1.1665
+5-star count: 2,028,791
+Interpretation:
+Ratings are strongly skewed positive.
+6.2 User and Item Activity Results
+Paste charts:
+ratings per user histogram
+ratings per item histogram
+Key numbers:
+Mean ratings per user: 11.46
+Median ratings per user: 7
+Mean ratings per item: 56.67
+Median ratings per item: 16
+Interpretation:
+User activity and item popularity are highly uneven.
+6.3 Time Trend Results
+Paste chart: yearly review count.
+Key result:
+Review activity increases sharply after around 2012 and peaks around 2014–2016.
+Interpretation:
+The dataset becomes denser in later years.
+6.4 Statistical Test Results
+Paste table:
+Test
+Result
+Interpretation
+One-sample t-test
+t = 350.37, p < 0.001
+Mean rating statistically differs from 4.0
+CI for mean
+[4.2201, 4.2226]
+Mean rating is slightly above 4.0
+Rating/time correlation
+r = 0.0938, p = 0.6780
+No meaningful linear relation
+Reviewer activity/rating correlation
+r = -0.0235
+Statistically significant but practically tiny
+
+6.5 Timothy — Review Length Results
+Paste 2–3 figures max:
+review length distribution
+review length by rating/helpfulness
+reviewer type differences
+Key results:
+Median review length: 25 words
+Mean review length: 81.1 words
+Longest median review length: 2-star reviews
+Shortest median review length: 5-star reviews
+Spearman correlation between review length and helpful votes: 0.497
+Regression coefficient for log review length: 0.1677
+Verified median review length: 18 words
+Unverified median review length: 112 words
+Heavy reviewer median review length: 169 words
+Non-heavy reviewer median review length: 22 words
+Interpretation:
+Review length adds a text-based behavioral signal beyond star ratings. Longer reviews are more associated with helpfulness votes, and reviewer type strongly affects how much users write.
+
+7. Discussion / Interpretation Dump
+Main findings
+Ratings are strongly skewed positive.
+Most ratings are 4 or 5 stars.
+User activity is concentrated among a small number of active reviewers.
+Item popularity follows a long-tail distribution.
+The user-item matrix is extremely sparse.
+Review activity increases sharply in later years.
+Review length is right-skewed.
+Longer reviews are more associated with helpfulness votes.
+Verified reviews are shorter than unverified reviews.
+Heavy reviewers write much longer reviews than non-heavy reviewers.
+Interpretation
+The results show that Amazon Movies and TV review behavior is highly uneven. Ratings are not evenly distributed across the 1–5 scale; they are concentrated near the high end. Users and items are also unevenly represented, which is typical of recommendation data.
+The review-length analysis shows that text behavior adds information beyond star ratings. Review length helps capture how much explanation reviewers provide. This is useful because star ratings alone do not show whether a review is detailed, helpful, or written by a highly active reviewer.
+Limitations
+The dataset ends in 2018.
+The 5-core dataset is filtered, so it excludes many low-activity users and items.
+The data is observational, so results show association, not causation.
+Helpfulness votes may be biased because visible reviews get more votes.
+Review length does not measure sentiment or quality directly.
+Product metadata such as genre, price, and title were not included in the main analysis.
+Very large sample size makes small effects statistically significant.
+
+8. Conclusion Dump
+Draft conclusion
+This project analyzed Amazon Movies and TV reviews to understand rating behavior, reviewer activity, item popularity, and review comment length. The main findings show that ratings are heavily skewed positive, user and item activity are highly uneven, and the user-item matrix is extremely sparse. These patterns matter because they affect how review data should be interpreted and how recommendation systems may perform.
+The final review-length analysis adds that written review detail is also an important behavioral signal. Longer reviews are more associated with helpfulness votes, while verified and heavy reviewers show very different writing patterns. Overall, the project shows that review data should be interpreted using both rating-based and reviewer-behavior features.
+
+9. References Dump
+Add references in IEEE style.
+Minimum references:
+[1] J. McAuley, “Amazon Review Data (2018),” UCSD. [Online]. Available: https://cseweb.ucsd.edu/~jmcauley/datasets/amazon_v2/
+
+Optional:
+[2] J. McAuley, R. Pandey, and J. Leskovec, “Inferring networks of substitutable and complementary products,” in Proceedings of the 21st ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, 2015.
+
+
+Teammate Fill-In Template
+Each teammate should paste this under their section:
+Name:
+
+Report section I contributed to:
+
+Research question:
+
+Variables used:
+
+Data preparation I did:
+
+Methods used:
+
+Formulas or statistical concepts used:
+
+Charts/tables produced:
+
+Main numerical results:
+
+Interpretation:
+
+Limitations:
+
+One paragraph for final report:
+
+One sentence for abstract:
+
+One sentence for conclusion:
+
+
+Recommended page budget for 6–8 pages
+Section
+Length
+Abstract
+0.25 page
+Introduction
+0.75 page
+Data Description
+1 page
+Methods
+1–1.5 pages
+Analysis & Results
+2.5–3 pages
+Discussion
+1 page
+Conclusion
+0.5 page
+References
+0.25 page
+
+Do not let everyone write 2 pages each. You will exceed the limit. Each teammate should dump everything first, then the final editor compresses.
+
+
+
+
+
+
+
+
+
+
+
+Cliff’s Dump:
+Code:
+import pandas as pd 
+import matplotlib.pyplot as plt
+# List of column names 
+cols = ['user_id', 'item_id', 'rating', 'timestamp']
+# Load the file without an existing header and assign names 
+df = pd.read_csv('Movies_and_TV.csv', names=cols, header=None)
+# Now check the first 5 rows again print(
+df.head()) 
+#Missing Data 
+print(df.isnull().sum()) 
+#Converting to readable dates 
+df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s') 
+print(df.head())
+# 1. Load data 
+cols = ['user_id', 'item_id', 'rating', 'timestamp'] 
+df = pd.read_csv('Movies_and_TV.csv', names=cols, header=None)
+# 2. Convert timestamp to datetime 
+df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s')
+
+# 3. Extract the month and month name for analysis 
+df['month'] = df['timestamp'].dt.month 
+df['month_name'] = df['timestamp'].dt.month_name()
+
+# 4. Calculate the average rating per month 
+seasonal_data = df.groupby('month')['rating'].mean() 
+month_labels = df.groupby('month')['month_name'].first()
+
+# 5. Plot the results 
+plt.figure(figsize=(10, 5)) 
+plt.plot(month_labels, seasonal_data, marker='o', color='b', linestyle='-')
+plt.title('Average Movie/TV Ratings by Month') 
+plt.xlabel('Month') 
+plt.ylabel('Average Rating') 
+plt.grid(True) 
+plt.xticks(rotation=45) 
+plt.tight_layout()
+
+plt.show() # Print the raw numbers to the terminal
+print ("Average Rating per Month:") print(df.groupby('month_name')['rating'].mean().sort_values(ascending=False))
+
+
+River’s Data Dump:
+
+Summarizes findings from Code/final_review_behavior_analysis.ipynb
+(see also river_notebook_text.md and river_figure_01.png–river_figure_05.png)
+
+Abstract
+--------
+This analysis used the full Movies_and_TV.csv interaction extract (McAuley-style Amazon reviews): 8,765,568 rating rows, aggregated to 182,032 distinct movies and 3,826,085 users. After minimum-activity filters (n_reviews >= 5 for both movie- and user-level analyses), 89,590 movies and 311,221 users entered the correlation studies. Popularity (review count) showed only negligible-to-weak rank associations with mean movie rating and with within-movie rating standard deviation (divisiveness). User activity showed a small negative association with mean user rating (“harshness” proxy). Heavy users (top decile by review count, threshold n_reviews >= 19; 32,905 users) contributed 16.4% of all reviews, rated slightly lower on average than non-heavy users, and showed modestly higher within-user rating variability; point-biserial correlations between star rating and heavy-user status were statistically significant but negligible in strength. All patterns are associative only and specific to this dataset slice.
+
+
+Introduction
+------------
+Online product reviews link visibility (how often an item is rated), disagreement among raters, and reviewer behavior (volume and leniency). This notebook addresses: (1) whether movies with more reviews have higher or lower average stars; (2) whether review volume relates to divisiveness (spread of 1–5 star ratings); (3) whether users who write more reviews give systematically lower average scores; and (4) whether “heavy” reviewers differ from others in means, spread, and star mix. Project goals align with understanding factors that shape how movies are reviewed and how users review (see ProjectGoals.md).
+
+
+Data Description
+Source file: Movies_and_TV.csv.
+Variables per row: item_id, user_id, rating (1–5), timestamp (converted to UTC datetime).
+Loading: full file via chunked reads (no random subsampling); all rows loaded.
+
+Entity-level aggregates:
+  - n_reviews: count of rows for each movie (item_id) or user (user_id).
+  - mean_rating: arithmetic mean of ratings.
+  - std_rating: sample standard deviation of ratings (divisiveness); meaningful with at least two ratings per movie.
+
+Filters applied for stability of means and SDs:
+  - MIN_MOVIE_REVIEWS = 5 for movie-level correlations.
+  - MIN_USER_REVIEWS = 5 for user-level “harshness” analysis.
+
+After filtering:
+  - Movies: 182,032 total titles; 89,590 with n_reviews >= 5.
+  - Users: 3,826,085 total; 311,221 with n_reviews >= 5.
+
+
+Methods
+Software stack (notebook): Python with pandas, NumPy, SciPy (stats), matplotlib, seaborn.
+
+Correlation reporting for continuous pairs (movie/user counts vs outcomes):
+  - Pearson r on raw review counts and on log1p(n_reviews) (aligned with log-scaled scatter x-axes); R-squared from log-scale Pearson where reported.
+  - Spearman rho and Kendall tau for monotonic association.
+  - Exploratory strength labels for |Spearman rho| (negligible / weak / moderate / strong bands).
+
+Heavy-user definition:
+  - Among users with n_reviews >= MIN_USER_REVIEWS, heavy users are those at or above the 90th percentile of n_reviews (HEAVY_QUANTILE = 0.90).
+  - Compared heavy vs non-heavy: share of all reviews, overall mean rating, shares of low (1–2) and high (4–5) stars, mean within-user rating SD, Mann–Whitney U on within-user SDs, point-biserial correlation between rating and heavy-user indicator (0/1).
+
+Figures exported in this folder: river_figure_01.png (movie count vs mean), river_figure_02.png (movie count vs SD), river_figure_03.png (user activity vs mean), river_figure_04.png (boxplots), river_figure_05.png (star-mix bars).
+
+
+Analysis & Results
+
+A. Movie review count vs mean rating (n = 89,590 movies)
+    Pearson r (raw): +0.0403 (p ≈ 1.88e-33); labeled negligible strength.
+    Pearson r (log1p count): +0.0981 (p ≈ 2.39e-190); R-squared ≈ 0.0096.
+    Spearman rho: +0.0672 (p ≈ 2.74e-90); negligible strength.
+    Kendall tau: +0.0471 (p ≈ 3.10e-96).
+    Interpretation: statistically detectable positive association; effect sizes remain small—review volume explains little variance in mean rating.
+
+B. Movie review count vs rating SD / divisiveness (n = 89,590 movies)
+    Pearson r (raw): -0.0124 (p ≈ 2.17e-04); negligible.
+    Pearson r (log1p count): -0.0034 (p ≈ 0.305); R-squared ≈ 0.0000.
+    Spearman rho: -0.0310 (p ≈ 1.62e-20); negligible.
+    Kendall tau: -0.0269 (p ≈ 1.06e-32).
+    Interpretation: tiny negative rank association; divisiveness is not strongly tied to popularity in this extract.
+
+C. User review count vs mean user rating / harshness proxy (n = 311,221 users)
+    Pearson r (raw): -0.0234 (p ≈ 5.17e-39); negligible.
+    Pearson r (log1p count): -0.0207 (p ≈ 7.79e-31); R-squared ≈ 0.0004.
+    Spearman rho: -0.0574 (p ≈ 2.82e-225); negligible.
+    Kendall tau: -0.0408 (p ≈ 1.42e-218).
+    Interpretation: users with more reviews in the file tend to have slightly lower average scores on average (direction consistent with “stricter” heavy reviewers), but the relationship is weak.
+
+D. Heavy users (>= 90th percentile of n_reviews among filtered users; threshold n_reviews >= 19)
+    Number of heavy users: 32,905.
+    Share of all review rows: heavy 16.43%, non-heavy 83.57%.
+    Overall mean rating (all rows): heavy 4.155, non-heavy 4.248.
+    Share of 1–2 star reviews: heavy 11.01%, non-heavy 12.03%.
+    Share of 4–5 star reviews: heavy 76.87%, non-heavy 80.30%.
+    Mean within-user rating SD (among users with n >= MIN_USER_REVIEWS): heavy 0.8600; non-heavy 0.7965.
+    Mann–Whitney U (heavy vs non-heavy within-user SD): p ≈ 2.29e-132.
+    Review-level association (N = 8,765,568 rows): point-biserial Pearson r ≈ -0.0282; Spearman rho ≈ -0.0575; Kendall tau ≈ -0.0541 (all p-values effectively zero at printed precision; strength labels negligible).
+
+Consolidated correlation table (key Pearson/Spearman values match sections A–D above; heavy-user row uses full review-level N).
+
+
+Discussion
+----------
+Effect sizes: Despite many highly significant p-values (large N), all labeled correlation strengths are “negligible” under the notebook’s exploratory bands. Substantive conclusions should emphasize small explained variance (e.g., R-squared on log count for movie mean rating under 1%) rather than significance alone.
+
+Movie popularity: A weak positive link between review volume and mean rating is consistent with mainstream titles receiving both more ratings and slightly higher averages, but genre, quality, and selection effects are not controlled.
+
+Divisiveness: The near-zero R-squared on log count vs SD suggests popularity does not systematically drive agreement or disagreement in a strong way in this file.
+
+User harshness: The negative association between activity and mean user score is consistent with more active raters being slightly more critical on average, or with cohort/selection effects (different item mixes over time).
+
+Heavy users: Group differences in mean rating and star mix are modest; heavy users have slightly higher internal variability (SD). Boxplot summaries (medians ~4.34 heavy vs ~4.42 non-heavy in printed numeric summary) overlap substantially—behavior is more similar than different, with statistically detectable but small shifts.
+
+Causality: Correlations do not imply causation. Visibility, item characteristics, and temporal factors confound volume-outcome relationships.
+
+
+Conclusion
+
+In the Movies_and_TV.csv extract analyzed without subsampling, movie review count bears only a weak positive association with average rating and a negligible negative association with rating spread. User review count shows a weak negative association with mean user rating. Heavy reviewers (top 10% by activity among users with at least five reviews) differ slightly from others in mean rating, star distribution, and within-user variability; review-level correlations with heavy-user status remain negligible in strength. Findings describe structure in this dataset only; generalization to all Amazon or movie reviews requires broader data and modeling beyond bivariate correlation.
+
+
+References
+
+- Dataset schema and project framing: DatasetDescription.md; ProjectGoals.md (repository root).
+- Analysis notebook: Code/final_review_behavior_analysis.ipynb.
+- Primary data file: Movies_and_TV.csv (Amazon Movies & TV reviews; McAuley/Leskovec-style extract as used in course project).
+- Companion narrative extract: final_report_latex_source/river_notebook_text.md.
+- Figures: final_report_latex_source/river_figure_01.png through river_figure_05.png.
+
+
