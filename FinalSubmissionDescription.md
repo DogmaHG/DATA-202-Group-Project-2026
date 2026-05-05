@@ -1,4 +1,4 @@
-. Final Report
+## 1. Final Report
 
 Your report should follow a simple IEEE-style format (2 columns, max 6-8 pages). This is a clear, structured mathematical/statistical report, not a complex research paper.
 Required Sections (Minimum)

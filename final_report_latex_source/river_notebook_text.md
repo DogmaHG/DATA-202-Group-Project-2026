@@ -8,7 +8,7 @@
 
 # Review behavior: movies, users, and popularity
 
-This notebook examines **user–movie interactions** in **Movies_and_TV.csv** (same schema as [DatasetDescription.md](../DatasetDescription.md): `item_id`, `user_id`, `rating`, `timestamp`). It connects to [ProjectGoals.md](../ProjectGoals.md): factors that influence **how a movie is reviewed** and **how users review**.
+This notebook examines **user–movie interactions** in **Movies_and_TV.csv** (same schema as [DatasetDescription.md](../DatasetDescription.md): `item_id`, `user_id`, `rating`, `timestamp`). It focuses on factors that influence **how a movie is reviewed** and **how users review**.
 
 **Questions addressed**
 
@@ -318,13 +318,11 @@ Correlation coefficients for each analyzed metric (Pearson r, Spearman ρ, Kenda
 - **User count vs mean:** A trend links **volume** to **average strictness** within this Amazon Movies & TV extract; causal claims need richer modeling.
 - **Heavy users:** Compare boxplot overlap and star-mix bars—large overlaps imply **similar** behaviour despite activity differences; systematic shifts support **different** behaviour among heavy reviewers.
 
-**Next steps (optional):** stratify by `year` or genre if you merge metadata; use **bootstrap** confidence intervals for correlations; adjust for **minimum reviews** sensitivity analysis.
-
 ## Cell 27 (markdown)
 
 ## 8. Conclusion — analysis by research check
 
-Use this section after you have **run all cells** and recorded **your** correlations, *p*-values, plots, and tables. Fill in bracketed prompts with values from your outputs; the bullets summarize how each **check** answers the corresponding question using this notebook’s definitions.
+After running all cells, tie each research question to the printed correlations, *p*-values, plots, and tables using the definitions above.
 
 ### Check 1 — Movie review count vs mean rating
 

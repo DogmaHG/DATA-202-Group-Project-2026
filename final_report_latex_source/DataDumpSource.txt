@@ -1,7 +1,6 @@
-That changes the dump doc slightly. Since the final report is IEEE-style, 2 columns, 6–8 pages max, your team should not dump everything into the final report. The dump doc should collect raw material, then you compress it.
-Use this structure instead.
-
 DATA 202 Final Report Data Dump
+
+The final report is IEEE-style (2 columns, 6–8 pages max). Collect raw material here; compress it for the submitted report.
 Submission Requirements
 Due: Before class on May 5
 Required deliverables:
@@ -413,7 +412,7 @@ This analysis used the full Movies_and_TV.csv interaction extract (McAuley-style
 
 Introduction
 ------------
-Online product reviews link visibility (how often an item is rated), disagreement among raters, and reviewer behavior (volume and leniency). This notebook addresses: (1) whether movies with more reviews have higher or lower average stars; (2) whether review volume relates to divisiveness (spread of 1–5 star ratings); (3) whether users who write more reviews give systematically lower average scores; and (4) whether “heavy” reviewers differ from others in means, spread, and star mix. Project goals align with understanding factors that shape how movies are reviewed and how users review (see ProjectGoals.md).
+Online product reviews link visibility (how often an item is rated), disagreement among raters, and reviewer behavior (volume and leniency). This notebook addresses: (1) whether movies with more reviews have higher or lower average stars; (2) whether review volume relates to divisiveness (spread of 1–5 star ratings); (3) whether users who write more reviews give systematically lower average scores; and (4) whether “heavy” reviewers differ from others in means, spread, and star mix. These questions align with understanding factors that shape how movies are reviewed and how users review.
 
 
 Data Description
@@ -508,7 +507,7 @@ In the Movies_and_TV.csv extract analyzed without subsampling, movie review coun
 
 References
 
-- Dataset schema and project framing: DatasetDescription.md; ProjectGoals.md (repository root).
+- Dataset schema and submission requirements: DatasetDescription.md; FinalSubmissionDescription.md (repository root).
 - Analysis notebook: Code/final_review_behavior_analysis.ipynb.
 - Primary data file: Movies_and_TV.csv (Amazon Movies & TV reviews; McAuley/Leskovec-style extract as used in course project).
 - Companion narrative extract: final_report_latex_source/river_notebook_text.md.

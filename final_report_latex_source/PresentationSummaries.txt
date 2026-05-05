@@ -1,5 +1,3 @@
-Here is a comprehensive write-up of your project based on the provided presentations:
-
 # Decoding User-Movie Interactions and Review Behaviors
 **Authors:** Cliff, Luca, River, Timothy
 
@@ -20,7 +18,7 @@ The data for this analysis was sourced from a ratings-only dataset of Amazon's M
 
 **Data Preprocessing:**
 * Initial validation was performed to check schemas, confirm variable types, and observe structural summaries.
-* To filter the dataset for modeling, analysis was restricted to users who met a minimum activity level of $\ge5$ reviews, yielding approximately 89,590 qualified users and 311,221 qualified movies.
+* To filter the dataset for modeling, movie- and user-level analyses applied minimum activity thresholds ($\ge5$ reviews per movie or per user where noted), yielding approximately 89,590 movies and 311,221 users for those aggregated analyses.
 * Because review length (word count) and helpful votes were found to be highly right-skewed, logarithmic transformations and median values were used to analyze these variables properly.
 
 ## Mathematical / Statistical Methods

@@ -1,1 +1,1 @@
-The Movies and TV dataset includes a only fields for (item, user, rating, and timestamp) as described by https://cseweb.ucsd.edu/~jmcauley/datasets/amazon_v2/
+The Movies and TV dataset includes only the fields (item, user, rating, and timestamp), as described at https://cseweb.ucsd.edu/~jmcauley/datasets/amazon_v2/
